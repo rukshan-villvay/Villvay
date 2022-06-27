@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import Head from "next/head";
+import type { NextPage } from "next";
 
-export default function Services() {
+const Services: NextPage = () => {
   return (
     <div>
       <Head>
@@ -139,4 +140,5 @@ export default function Services() {
       </div>
     </div>
   );
-}
+};
+export default Services;

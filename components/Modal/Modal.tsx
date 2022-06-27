@@ -1,6 +1,9 @@
 import React from "react";
+import type { FC, ReactNode } from "react";
 
-function Modal({ message, closeModal }) {
+type Props = { message: string; closeModal: () => void };
+
+const Modal: FC<Props> = ({ message, closeModal }) => {
   return (
     <div>
       <div
@@ -17,7 +20,7 @@ function Modal({ message, closeModal }) {
                 className="text-gray-400 bg-transparent  rounded-lg text-sm p-1.5 ml-auto inline-flex ali hover:bg-gray-600 hover:text-white"
                 data-modal-toggle="defaultModal"
                 onClick={() => {
-                  closeModal(false);
+                  closeModal();
                 }}
               >
                 <svg
@@ -39,7 +42,7 @@ function Modal({ message, closeModal }) {
               <button
                 data-modal-toggle="defaultModal"
                 type="button"
-                onClick={() => closeModal(false)}
+                onClick={() => closeModal()}
                 className="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
               >
                 Close
@@ -50,6 +53,6 @@ function Modal({ message, closeModal }) {
       </div>
     </div>
   );
-}
+};
 
 export default Modal;

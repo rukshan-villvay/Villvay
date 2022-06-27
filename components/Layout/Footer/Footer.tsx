@@ -1,6 +1,7 @@
 import Image from "next/image";
+import type { FC, ReactNode } from "react";
 
-export default function Footer() {
+const Footer: FC = () => {
   return (
     <footer className="p-4 sm:p-6 bg-gray-800">
       <div className="md:flex md:justify-between">
@@ -155,4 +156,5 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+};
+export default Footer;

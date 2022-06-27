@@ -2,6 +2,7 @@ import * as React from "react";
 import Link from "next/link";
 import type { FC, ReactNode } from "react";
 import { useState } from "react";
+
 const Navbar: FC = () => {
   const [dropdownOpen, setdropdownOpen] = useState(false);
   React.useEffect(() => {

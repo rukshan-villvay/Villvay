@@ -88,7 +88,6 @@ handler.post(async (req, response) => {
       console.log("come:", refId);
       let files = [];
       for (const key in req["files"]) {
-        console.log(req["files"][key][0]);
         files.push(req["files"][key][0]);
         let blob = fs.readFileSync(req["files"][key][0]["path"]);
         let formData = new FormData();

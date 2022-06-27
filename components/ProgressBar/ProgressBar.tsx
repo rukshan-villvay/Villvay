@@ -1,6 +1,7 @@
 import React from "react";
+import type { FC, ReactNode } from "react";
 
-function ProgressBar({ isProgress }) {
+const ProgressBar: FC = () => {
   return (
     <div className="flex items-center justify-center">
       <svg
@@ -21,6 +22,6 @@ function ProgressBar({ isProgress }) {
       </svg>
     </div>
   );
-}
+};
 
 export default ProgressBar;

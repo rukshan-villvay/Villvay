@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Head from "next/head";
-export default function About() {
+import type { NextPage } from "next";
+
+const About: NextPage = () => {
   return (
     <div>
       <Head>
@@ -162,4 +164,5 @@ export default function About() {
       </div>
     </div>
   );
-}
+};
+export default About;

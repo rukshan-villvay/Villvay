@@ -5,8 +5,9 @@ import Modal from "../components/Modal";
 import { useState } from "react";
 import Head from "next/head";
 import ProgressBar from "../components/ProgressBar";
+import type { NextPage } from "next";
 
-export default function Contact() {
+const Contact: NextPage = () => {
   const [msg, setMsg] = useState("");
   const [isProgress, setisProgress] = useState(false);
   const [isShowMsg, setIsShowMsg] = useState(false);
@@ -69,7 +70,7 @@ export default function Contact() {
       <Head>
         <title>Villvay | Contact</title>
       </Head>
-      {isProgress && <ProgressBar isProgress={isProgress} />}
+      {isProgress && <ProgressBar />}
       <div>
         <div className="bg-gray-800">
           <div className="grid grid-cols-4 py-20">
@@ -237,4 +238,5 @@ export default function Contact() {
       {isShowMsg && <Modal message={msg} closeModal={closeModal} />}
     </div>
   );
-}
+};
+export default Contact;

@@ -2,7 +2,6 @@ import api from "../../../lib/api";
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useDropzone } from "react-dropzone";
 import Head from "next/head";
 import { useRef, useState } from "react";
 import axios from "axios";
@@ -110,7 +109,7 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
       <Head>
         <title>Villvay | Careers |{careerDetails.data.attributes.type} </title>
       </Head>
-      {isProgress && <ProgressBar isProgress={isProgress} />}
+      {isProgress && <ProgressBar />}
       <h1 className="text-slate-900 text-center  text-3xl py-10">
         Application for the {careerDetails.data.attributes.type}
       </h1>

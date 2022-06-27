@@ -1,4 +1,4 @@
-export default function renderMobileMenu() {
+const renderMobileMenu = () => {
   return (
     <div>
       <span className="sr-only">Open main menu</span>
@@ -28,4 +28,5 @@ export default function renderMobileMenu() {
       </svg>
     </div>
   );
-}
+};
+export default renderMobileMenu;

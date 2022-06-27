@@ -2,7 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
 import { useState } from "react";
-export default function Work() {
+import type { NextPage } from "next";
+
+const Work: NextPage = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   setInterval(() => {
@@ -95,4 +97,5 @@ export default function Work() {
       </div>
     </div>
   );
-}
+};
+export default Work;
