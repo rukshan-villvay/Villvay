@@ -30,17 +30,17 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
   const closeModal = () => {
     setIsShowMsg(false);
   };
-  const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
-    useDropzone({
-      accept: {
-        "image/pdf": [".pdf"],
-      },
-    });
-  const files = acceptedFiles.map((file) => (
-    <li key={file.name}>
-      {file.name} - {file.size}
-    </li>
-  ));
+  // const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
+  //   useDropzone({
+  //     accept: {
+  //       "image/pdf": [".pdf"],
+  //     },
+  //   });
+  // const files = acceptedFiles.map((file) => (
+  //   <li key={file.name}>
+  //     {file.name} - {file.size}
+  //   </li>
+  // ));
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -51,13 +51,19 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
     },
     validationSchema: Yup.object({
       name: Yup.string()
+        .trim()
         .max(100, "Must be less than 100")
         .min(5, "Must be more than 5")
         .required("Required"),
       conNumber: Yup.string()
+        .trim()
+        .matches(/^(0)[0-9]{9}$/, "check your contact number")
         .length(10, "only have to  10 number in contact number")
         .required("Required"),
-      email: Yup.string().email("Invalid Email Address").required("Required"),
+      email: Yup.string()
+        .trim()
+        .email("Invalid Email Address")
+        .required("Required"),
       fileCV: Yup.mixed().required("Required"),
       fileCover: Yup.mixed().required("Required"),
     }),
@@ -195,6 +201,7 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
                   aria-describedby="file_input_help"
                   id="fileCV"
                   type="file"
+                  accept="application/pdf"
                   onChange={(e) => {
                     onFileChange(e, "fileCV");
                   }}
@@ -227,6 +234,7 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
                   aria-describedby="file_input_help"
                   id="fileCover"
                   type="file"
+                  accept="application/pdf"
                   onChange={(e) => {
                     onFileChange(e, "fileCover");
                   }}

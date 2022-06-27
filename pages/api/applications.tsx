@@ -2,6 +2,7 @@ import api from "../../lib/api";
 import nextConnect from "next-connect";
 import { NextApiRequest, NextApiResponse } from "next";
 import HttpStatus from "http-status-codes";
+import FormData from "form-data";
 const nodemailer = require("nodemailer");
 const multer = require("multer");
 const dotenv = require("dotenv");
@@ -66,12 +67,7 @@ const uploadMiddleware = upload.fields([
 // Adds the middleware to Next-Connect
 handler.use(uploadMiddleware);
 
-handler.post(async (req, res) => {
-  // console.log("came");
-  // console.log(req["body"]);
-  // console.log(req["files"]);
-  // fileCover: req.files.fileCover,
-  // fileCV: req.files.fileCV,
+handler.post(async (req, response) => {
   const data = {
     data: {
       name: req["body"].name,
@@ -79,36 +75,44 @@ handler.post(async (req, res) => {
       contactNumber: req["body"].conNumber,
     },
   };
-  try {
-    // const response = await api.post("/api/applications", data);
-    // const id = response.data.data.id;
-    // let dataFile = { data: {} };
-    // for (const [key, value] of Object.entries(req.files)) {
-    //   dataFile.data[`files.application[${id}].${key}`] = value[0];
-    //   console.log(dataFile);
-    //   //files.my_component_name[the_index].attribute_name
-    // const responseFile = await api.post("/api/upload", dataFile, {
-    //   headers: {
-    //     Authorization: `Bearer ${process.env.TOKEN}`,
-    //   },
-    // });
-    //   dataFile = { data: {} };
-    // }
-    let files = [];
-    for (const [key, value] of Object.entries(req["files"])) {
-      files.push(value[0]);
-    }
-    await handleMail(req["body"], files);
-    // dataFile.data[`files.application[${id}].files`] = [
-    //   req.files["fileCV"][0],
-    //   req.files["fileCover"][0],
-    // ];
-    // const responseFile = await api.post("/api/upload", dataFile);
-    res.status(HttpStatus.OK).json({ message: "done!!" });
-  } catch (error) {
-    // console.log(error);
-    res.status(HttpStatus.BAD_REQUEST).json({ error: error });
-  }
+  api
+    .post("/api/applications", data, {
+      headers: {
+        Authorization: `Bearer ${process.env.TOKEN}`,
+      },
+    })
+    .then((res) => {
+      return res.data.data.id;
+    })
+    .then((refId) => {
+      console.log("come:", refId);
+      let files = [];
+      for (const key in req["files"]) {
+        console.log(req["files"][key][0]);
+        files.push(req["files"][key][0]);
+        let blob = fs.readFileSync(req["files"][key][0]["path"]);
+        let formData = new FormData();
+        formData.append("files", blob, req["files"][key][0]["originalname"]);
+        formData.append("refId", refId);
+        formData.append("ref", "application");
+        formData.append("field", key);
+        api.post("/api/upload", formData, {
+          headers: {
+            Authorization: `Bearer ${process.env.TOKEN}`,
+          },
+        });
+      }
+      return files;
+    })
+    .then((res) => {
+      handleMail(req["body"], res);
+    })
+    .then(() => {
+      response.status(HttpStatus.OK).json({ message: "done!!" });
+    })
+    .catch((error) => {
+      response.status(HttpStatus.BAD_REQUEST).json({ error: error });
+    });
 });
 
 export const config = {

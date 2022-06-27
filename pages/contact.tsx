@@ -22,15 +22,21 @@ export default function Contact() {
     },
     validationSchema: Yup.object({
       name: Yup.string()
+        .trim()
         .max(100, "Must be less than 100")
         .min(5, "Must be more than 5")
         .required("Required"),
       company: Yup.string()
+        .trim()
         .max(20, "Must be less than 100")
         .min(5, "Must be more than 5")
         .notRequired(),
-      email: Yup.string().email("Invalid Email Address").required("Required"),
+      email: Yup.string()
+        .trim()
+        .email("Invalid Email Address")
+        .required("Required"),
       message: Yup.string()
+        .trim()
         .max(1000, "Must be less than 100")
         .min(5, "Must be more than 5")
         .required("Required"),

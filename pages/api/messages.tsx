@@ -18,7 +18,6 @@ const handler = async (req, res) => {
       });
       res.status(HttpStatus.OK).json({ message: "done!!" });
     } catch (error) {
-      //console.log(error);
       res.status(HttpStatus.BAD_REQUEST).json({ error: error });
     }
   }
