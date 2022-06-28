@@ -51,7 +51,7 @@ const About: NextPage = () => {
                 Regular progress updates of projects
               </h3>
             </div>
-            <div className="h-50 w-60 mx-14 my-10">
+            <div className="h-60 w-60 mx-14 my-10">
               <h1 className="text-slate-900 text-left text-2xl my-7">
                 3. Availability
               </h1>
@@ -62,7 +62,7 @@ const About: NextPage = () => {
                 Continents apart but only a skype call away
               </h3>
             </div>
-            <div className="h-50 w-60 mx-14 my-10">
+            <div className="h-60 w-60 mx-14 my-10">
               <h1 className="text-slate-900 text-left text-2xl my-7">
                 4. Delivery
               </h1>
@@ -74,7 +74,7 @@ const About: NextPage = () => {
                 Sticking to timeplans and meeting deadlines
               </h3>
             </div>
-            <div className="h-50 w-60 mx-14 my-10">
+            <div className="h-60 w-60 mx-14 my-10">
               <h1 className="text-slate-900 text-left text-2xl my-7">
                 5. Team
               </h1>
@@ -85,7 +85,7 @@ const About: NextPage = () => {
                 Continuous Training, learning and development
               </h3>
             </div>
-            <div className="h-50 w-60 mx-14 my-10">
+            <div className="h-60 w-60 mx-14 my-10">
               <h1 className="text-slate-900 text-left text-2xl my-7">
                 6. Technology
               </h1>
@@ -97,7 +97,7 @@ const About: NextPage = () => {
                 problems
               </h3>
             </div>
-            <div className="h-50 w-60 mx-14 my-10">
+            <div className="h-60 w-60 mx-14 my-10">
               <h1 className="text-slate-900 text-left text-2xl my-7">
                 7. Development standards
               </h1>
@@ -108,7 +108,7 @@ const About: NextPage = () => {
                 Coding with website performance in mind
               </h3>
             </div>
-            <div className="h-50 w-60 mx-14 my-10">
+            <div className="h-60 w-60 mx-14 my-10">
               <h1 className="text-slate-900 text-left text-2xl my-7">
                 8. Quality Assurance and testing
               </h1>
@@ -119,7 +119,7 @@ const About: NextPage = () => {
                 Deliver high quality, bug free user experiences
               </h3>
             </div>
-            <div className="h-50 w-60 mx-14 my-10">
+            <div className="h-60 w-60 mx-14 my-10">
               <h1 className="text-slate-900 text-left text-2xl my-7">
                 9. Collaboration and transparency
               </h1>
@@ -130,7 +130,7 @@ const About: NextPage = () => {
                 Review code by accessing staging environments
               </h3>
             </div>
-            <div className="h-50 w-60 mx-14 my-10">
+            <div className="h-60 w-60 mx-14 my-10">
               <h1 className="text-slate-900 text-left text-2xl my-7">
                 10. Pricing
               </h1>
