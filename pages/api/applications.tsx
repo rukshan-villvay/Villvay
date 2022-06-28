@@ -28,7 +28,7 @@ const handleMail = async (body, files) => {
     to: process.env.EMAIL_ADDRESS_TO,
     subject: `APPLICATION FOR THE ${body.type}`,
     text: "Hi,",
-    html: `<div style="background-color:black;color:white;padding:20px;">
+    html: `<div style="padding:20px;">
             <p>type: ${body.type}</p>
             <p>name:${body.name}</p>
             <p>email:${body.email}</p>
