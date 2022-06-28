@@ -11,7 +11,11 @@ const fs = require("fs");
 dotenv.config();
 const upload = multer({
   storage: multer.diskStorage({
-    destination: "./public/uploads",
+    destination: (req, file, cb) => {
+      const path = "./public/uploads/";
+      fs.mkdirSync(path, { recursive: true });
+      return cb(null, path);
+    },
     filename: (req, file, cb) => cb(null, file.originalname),
   }),
 });
