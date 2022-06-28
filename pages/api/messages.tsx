@@ -11,7 +11,7 @@ const handler = async (req, res) => {
       },
     };
     try {
-      const response = await api.post("/api/messages", data, {
+      const response = await api.post("/messages", data, {
         headers: {
           Authorization: `Bearer ${process.env.TOKEN}`,
         },

@@ -76,7 +76,7 @@ handler.post(async (req, response) => {
     },
   };
   api
-    .post("/api/applications", data, {
+    .post("/applications", data, {
       headers: {
         Authorization: `Bearer ${process.env.TOKEN}`,
       },
@@ -93,9 +93,9 @@ handler.post(async (req, response) => {
         let formData = new FormData();
         formData.append("files", blob, req["files"][key][0]["originalname"]);
         formData.append("refId", refId);
-        formData.append("ref", "application");
+        formData.append("ref", "api::application.application");
         formData.append("field", key);
-        api.post("/api/upload", formData, {
+        api.post("/upload", formData, {
           headers: {
             Authorization: `Bearer ${process.env.TOKEN}`,
           },

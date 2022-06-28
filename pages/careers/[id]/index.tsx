@@ -76,7 +76,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
           total: number;
         };
       };
-    }>(`/api/careers/${id}`, {
+    }>(`/careers/${id}`, {
       headers: {
         Authorization: `Bearer ${process.env.TOKEN}`,
       },

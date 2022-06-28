@@ -313,7 +313,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const { params } = context;
   const { id } = params;
   try {
-    const { data } = await api.get(`/api/careers/${id}`, {
+    const { data } = await api.get(`/careers/${id}`, {
       headers: {
         Authorization: `Bearer ${process.env.TOKEN}`,
       },
