@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
+import api from "../lib/api";
 import Modal from "../components/Modal";
 import { useState } from "react";
 import Head from "next/head";
@@ -48,8 +48,19 @@ const Contact: NextPage = () => {
       email: string;
       message: string;
     }) => {
+      const data = {
+        data: {
+          name: values.name,
+          company: values.company,
+          email: values.email,
+          message: values.message,
+        },
+      };
       try {
-        const response = await axios.post("/api/messages", values);
+        const response = await api.post(
+          "http://localhost:1337/api/messages",
+          data
+        );
         setMsg(response.status === 200 ? "successfull!!" : "Try again!!");
         setisProgress(false);
         setIsShowMsg(true);

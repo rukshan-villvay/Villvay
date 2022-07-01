@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 import axios from "axios";
 import Modal from "../../../components/Modal";
 import ProgressBar from "../../../components/ProgressBar";
+
 type Props = {
   careerDetails: {
     data: {
@@ -29,17 +30,6 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
   const closeModal = () => {
     setIsShowMsg(false);
   };
-  // const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
-  //   useDropzone({
-  //     accept: {
-  //       "image/pdf": [".pdf"],
-  //     },
-  //   });
-  // const files = acceptedFiles.map((file) => (
-  //   <li key={file.name}>
-  //     {file.name} - {file.size}
-  //   </li>
-  // ));
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -67,37 +57,88 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
       fileCover: Yup.mixed().required("Required"),
     }),
     onSubmit: async (values) => {
+      const data = {
+        data: {
+          type: careerDetails.data.attributes.type,
+          name: values.name,
+          email: values.email,
+          contactNumber: values.conNumber,
+        },
+      };
+      setisProgress(true);
       try {
-        const formData = new FormData();
-        formData.append("type", careerDetails.data.attributes.type);
-        formData.append("name", values.name);
-        formData.append("email", values.email);
-        formData.append("conNumber", values.conNumber);
-        formData.append("fileCV", values.fileCV[0]);
-        formData.append("fileCover", values.fileCover[0]);
-        setisProgress(true);
-        const response = await axios.post("/api/applications", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        setMsg(response.status === 200 ? "successfull!!" : "Try again!!");
-        setisProgress(false);
-        setIsShowMsg(true);
-        formik.values.name = "";
-        formik.values.conNumber = "";
-        formik.values.email = "";
-        formik.values.fileCV = undefined;
-        formik.values.fileCover = undefined;
-        fileRef.current = null;
-        setFileArr([]);
+        const res1 = await api.post(
+          "http://localhost:1337/api/applications",
+          data
+        );
+        if (res1.status !== 200) {
+          throw new Error("Data pass error");
+        }
+        const filesArr = [values.fileCV[0], values.fileCover[0]];
+        const files = {
+          fileCV: values.fileCV[0],
+          fileCover: values.fileCover[0],
+        };
+        console.log(res1.data.data.id);
+
+        for (const key in files) {
+          let formData = new FormData();
+          formData.append("files", files[key]);
+          formData.append("refId", res1.data.data.id);
+          formData.append("ref", "api::application.application");
+          formData.append("field", key);
+          try {
+            let res2 = await api.post(
+              "http://localhost:1337/api/upload",
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            );
+            if (res2.status !== 200) {
+              throw new Error("File upload error");
+            }
+            try {
+              const dataId = {
+                data: {
+                  id: res1.data.data.id,
+                },
+              };
+              let res3 = await api.post("/api/email", dataId);
+              if (res3.status !== 200) {
+                throw new Error("Email sending error");
+              }
+            } catch (error) {
+              setMsg("Try again!!");
+              setisProgress(false);
+              setIsShowMsg(true);
+            }
+            setMsg("successfull!!");
+            setisProgress(false);
+            setIsShowMsg(true);
+            formik.values.name = "";
+            formik.values.conNumber = "";
+            formik.values.email = "";
+            formik.values.fileCV = undefined;
+            formik.values.fileCover = undefined;
+            fileRef.current = null;
+            setFileArr([]);
+          } catch (error) {
+            setMsg("Try again!!");
+            setisProgress(false);
+            setIsShowMsg(true);
+          }
+        }
       } catch (error) {
         setMsg("Try again!!");
-        setIsShowMsg(true);
         setisProgress(false);
+        setIsShowMsg(true);
       }
     },
   });
+
   const onFileChange = (e, key) => {
     formik.setFieldValue(key, e.target.files);
     const file = e.target.files;
@@ -252,39 +293,6 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
                 ) : null}
               </div>
             </div>
-            {/* <div className="flex flex-wrap -mx-3 mb-6">
-              <div className="w-full px-3">
-                <label
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  htmlFor="fileCover"
-                >
-                  Upload The Cover Letter(PDF)
-                </label>
-                <section
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="fileCover"
-                  onChange={(e) => {
-                    onFileChange(e, "fileCover");
-                  }}
-                  ref={fileRef}
-                >
-                  <div {...getRootProps({ className: "dropzone" })}>
-                    <p className="text-center  border-black">
-                      Drag and drop or click
-                    </p>
-                  </div>
-                  <aside>
-                    <h4 className="text-red-700">Files</h4>
-                    <ul className="text-blue-700">{files}</ul>
-                  </aside>
-                  {formik.touched.fileCover && formik.errors.fileCover ? (
-                    <p className="font-bold text-red-600">
-                      {formik.errors.fileCover.toString()}
-                    </p>
-                  ) : null}
-                </section>
-              </div>
-            </div> */}
             <div className="grid grid-cols-5">
               <div className="col-start-3 col-span-2 ">
                 <button
@@ -313,10 +321,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const { params } = context;
   const { id } = params;
   try {
-    const { data } = await api.get(`/careers/${id}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.TOKEN}`,
-      },
+    const { data } = await api.request({
+      method: "GET",
+      url: `http://localhost:1337/api/careers/${id}`,
     });
     if (!data.data.attributes.active) {
       return { notFound: true };
