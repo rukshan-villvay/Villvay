@@ -4,7 +4,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Head from "next/head";
 import { useRef, useState } from "react";
-import axios from "axios";
 import Modal from "../../../components/Modal";
 import ProgressBar from "../../../components/ProgressBar";
 
@@ -106,7 +105,7 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
                   id: res1.data.data.id,
                 },
               };
-              let res3 = await api.post("/api/email", dataId);
+              let res3 = await api.post("/api/sends", dataId);
               if (res3.status !== 200) {
                 throw new Error("Email sending error");
               }
