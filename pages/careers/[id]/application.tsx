@@ -6,6 +6,7 @@ import Head from "next/head";
 import { useRef, useState } from "react";
 import Modal from "../../../components/Modal";
 import ProgressBar from "../../../components/ProgressBar";
+import axios from "axios";
 
 type Props = {
   careerDetails: {
@@ -66,10 +67,7 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
       };
       setisProgress(true);
       try {
-        const res1 = await api.post(
-          "http://localhost:1337/api/applications",
-          data
-        );
+        const res1 = await axios.post("/api/application", data);
         if (res1.status !== 200) {
           throw new Error("Data pass error");
         }
@@ -78,12 +76,10 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
           fileCV: values.fileCV[0],
           fileCover: values.fileCover[0],
         };
-        console.log(res1.data.data.id);
-
         for (const key in files) {
           let formData = new FormData();
           formData.append("files", files[key]);
-          formData.append("refId", res1.data.data.id);
+          formData.append("refId", res1.data.id);
           formData.append("ref", "api::application.application");
           formData.append("field", key);
           try {
@@ -99,36 +95,38 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
             if (res2.status !== 200) {
               throw new Error("File upload error");
             }
-            try {
-              const dataId = {
-                data: {
-                  id: res1.data.data.id,
-                },
-              };
-              let res3 = await api.post("/api/sends", dataId);
-              if (res3.status !== 200) {
-                throw new Error("Email sending error");
-              }
-            } catch (error) {
-              setMsg("Try again!!");
-              setisProgress(false);
-              setIsShowMsg(true);
-            }
-            setMsg("successfull!!");
-            setisProgress(false);
-            setIsShowMsg(true);
-            formik.values.name = "";
-            formik.values.conNumber = "";
-            formik.values.email = "";
-            formik.values.fileCV = undefined;
-            formik.values.fileCover = undefined;
-            fileRef.current = null;
-            setFileArr([]);
           } catch (error) {
             setMsg("Try again!!");
             setisProgress(false);
             setIsShowMsg(true);
           }
+        }
+        try {
+          const dataId = {
+            data: {
+              id: res1.data.id,
+            },
+          };
+          console.log("came");
+          const res3 = await axios.post("/api/email", dataId);
+          if (res3.status !== 200) {
+            console.log("came");
+            throw new Error("Email sending error");
+          }
+          setMsg("successfull!!");
+          setisProgress(false);
+          setIsShowMsg(true);
+          formik.values.name = "";
+          formik.values.conNumber = "";
+          formik.values.email = "";
+          formik.values.fileCV = undefined;
+          formik.values.fileCover = undefined;
+          fileRef.current = null;
+          setFileArr([]);
+        } catch (error) {
+          setMsg("Try again!!");
+          setisProgress(false);
+          setIsShowMsg(true);
         }
       } catch (error) {
         setMsg("Try again!!");
@@ -320,9 +318,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const { params } = context;
   const { id } = params;
   try {
-    const { data } = await api.request({
-      method: "GET",
-      url: `http://localhost:1337/api/careers/${id}`,
+    const { data } = await api.get(`/careers/${id}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.TOKEN}`,
+      },
     });
     if (!data.data.attributes.active) {
       return { notFound: true };

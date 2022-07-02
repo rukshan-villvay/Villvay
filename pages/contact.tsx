@@ -6,6 +6,7 @@ import { useState } from "react";
 import Head from "next/head";
 import ProgressBar from "../components/ProgressBar";
 import type { NextPage } from "next";
+import axios from "axios";
 
 const Contact: NextPage = () => {
   const [msg, setMsg] = useState("");
@@ -57,10 +58,7 @@ const Contact: NextPage = () => {
         },
       };
       try {
-        const response = await api.post(
-          "http://localhost:1337/api/messages",
-          data
-        );
+        const response = await axios.post("api/contact", data);
         setMsg(response.status === 200 ? "successfull!!" : "Try again!!");
         setisProgress(false);
         setIsShowMsg(true);

@@ -87,7 +87,11 @@ export const getStaticProps: GetStaticProps = async () => {
           total: number;
         };
       };
-    }>("/careers");
+    }>("/careers", {
+      headers: {
+        Authorization: `Bearer ${process.env.TOKEN}`,
+      },
+    });
     return { props: { careers: data.data }, revalidate: 3600 };
   } catch (error) {
     return { notFound: true };
