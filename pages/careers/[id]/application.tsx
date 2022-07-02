@@ -84,7 +84,7 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
           formData.append("field", key);
           try {
             let res2 = await api.post(
-              "http://localhost:1337/api/upload",
+              "https://villvay.herokuapp.com/api/upload",
               formData,
               {
                 headers: {
