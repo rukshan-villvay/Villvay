@@ -54,9 +54,14 @@ const handler = async (req, res) => {
         conNumber: res1.data.data.attributes.contactNumber,
         files: [
           `${process.env.MAIN_URL}${res1.data.data.attributes.fileCV.data.attributes.url}`,
-          `${process.env.MAIN_URL}${res1.data.data.attributes.fileCover.data.attributes.url}`,
         ],
       };
+
+      if (res1.data.data.attributes.fileCover.data !== null) {
+        data["files"].push(
+          `${process.env.MAIN_URL}${res1.data.data.attributes.fileCover.data.attributes.url}`
+        );
+      }
       try {
         await handleMail(data);
         res.status(HttpStatus.OK).json({ message: "done!!" });

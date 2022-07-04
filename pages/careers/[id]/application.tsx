@@ -7,7 +7,7 @@ import { useRef, useState } from "react";
 import Modal from "../../../components/Modal";
 import ProgressBar from "../../../components/ProgressBar";
 import axios from "axios";
-
+import Router from "next/router";
 type Props = {
   careerDetails: {
     data: {
@@ -29,7 +29,11 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
   const [isShowMsg, setIsShowMsg] = useState(false);
   const closeModal = () => {
     setIsShowMsg(false);
+    if (msg === "successfull!!") {
+      Router.push("/careers");
+    }
   };
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -54,7 +58,7 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
         .email("Invalid Email Address")
         .required("Required"),
       fileCV: Yup.mixed().required("Required"),
-      fileCover: Yup.mixed().required("Required"),
+      fileCover: Yup.mixed(),
     }),
     onSubmit: async (values) => {
       const data = {
@@ -71,11 +75,14 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
         if (res1.status !== 200) {
           throw new Error("Data pass error");
         }
-        const filesArr = [values.fileCV[0], values.fileCover[0]];
         const files = {
           fileCV: values.fileCV[0],
-          fileCover: values.fileCover[0],
         };
+
+        if (values.fileCover !== undefined && values.fileCover.length !== 0) {
+          files["fileCover"] = values.fileCover[0];
+        }
+
         for (const key in files) {
           let formData = new FormData();
           formData.append("files", files[key]);
@@ -283,9 +290,9 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
                 >
                   PDF
                 </p>
-                {formik.touched.fileCV && formik.errors.fileCV ? (
+                {formik.touched.fileCover && formik.errors.fileCover ? (
                   <p className="font-bold text-red-600">
-                    {formik.errors.fileCV.toString()}
+                    {formik.errors.fileCover.toString()}
                   </p>
                 ) : null}
               </div>
