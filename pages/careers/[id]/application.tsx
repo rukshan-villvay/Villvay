@@ -114,10 +114,8 @@ const Application: NextPage<Props> = ({ careerDetails }) => {
               id: res1.data.id,
             },
           };
-          console.log("came");
           const res3 = await axios.post("/api/email", dataId);
           if (res3.status !== 200) {
-            console.log("came");
             throw new Error("Email sending error");
           }
           setMsg("successfull!!");
