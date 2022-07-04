@@ -331,7 +331,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     if (!data.data.attributes.active) {
       return { notFound: true };
     }
-    return { props: { careerDetails: data }, revalidate: 3600 };
+    return { props: { careerDetails: data }, revalidate: 60 };
   } catch (error) {
     return { notFound: true };
   }
